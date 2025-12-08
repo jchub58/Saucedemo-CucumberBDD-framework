@@ -38,4 +38,24 @@ public class LoginSteps {
         assertTrue(driver.getCurrentUrl().contains("inventory"));
     }
 
+@And("I should see {string} as the page title")
+    public void iShouldSeeAsThePageTitle(String title) {
+        String actualTitle = driver.findElement(By.className("title")).getText();
+        assertEquals(title, actualTitle);
+        driver.quit();
+    }
+    
+    @Then("I should see an error message")
+    public void iShouldSeeAnErrorMessage() {
+        assertTrue(driver.findElement(By.cssSelector("[data-test='error']")).isDisplayed());
+    }
+    
+    @And("the error should contain {string}")
+    public void theErrorShouldContain(String errorText) {
+        String error = driver.findElement(By.cssSelector("[data-test='error']")).getText();
+        assertTrue(error.contains(errorText));
+        driver.quit();
+    }
+}
+
 }
