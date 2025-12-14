@@ -20,15 +20,9 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Build') {
             steps {
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
@@ -42,7 +36,7 @@ pipeline {
                         runnerClass = "RegressionTestRunner"
                     }
 
-                    sh """
+                    bat """
                         mvn test -Dtest=${runnerClass} \
                         -Dbrowser=${params.BROWSER}
                     """
@@ -92,8 +86,8 @@ pipeline {
 
                     Job: ${env.JOB_NAME}
                     Build: ${env.BUILD_NUMBER}
-                    Suite: ${params.TEST_SUITE}
-                    Browser: ${params.BROWSER}
+                    Suite: %TEST_SUITE%
+                    Browser: %BROWSER%
 
                     Check console output: ${env.BUILD_URL}
                 """,
