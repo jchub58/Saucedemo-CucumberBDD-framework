@@ -6,9 +6,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CartPage {
-    private WebDriver driver;
-
+public class CartPage extends BasePage {
     private By cartItems = By.className("cart_item");
     private By itemNames = By.className("inventory_item_name");
     private By itemPrices = By.className("inventory_item_price");
@@ -17,29 +15,29 @@ public class CartPage {
     private By continueShoppingButton = By.id("continue-shopping");
 
     public CartPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public int getCartItemCount() {
-        return driver.findElements(cartItems).size();
+        return getElements(cartItems).size();
     }
 
     public List<String> getCartItemNames() {
-        return driver.findElements(itemNames).stream()
+        return getElements(itemNames).stream()
             .map(WebElement::getText)
             .collect(Collectors.toList());
     }
 
     public void removeItem(String itemName) {
         String buttonId = "remove-" + itemName.toLowerCase().replace(" ", "-");
-        driver.findElement(By.id(buttonId)).click();
+        waitAndClick(By.id(buttonId));
     }
 
     public void proceedToCheckout() {
-        driver.findElement(checkoutButton).click();
+        waitAndClick(checkoutButton);
     }
 
     public void continueShopping() {
-        driver.findElement(continueShoppingButton).click();
+        waitAndClick(continueShoppingButton);
     }
 }

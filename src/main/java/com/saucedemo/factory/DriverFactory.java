@@ -1,16 +1,14 @@
 package com.saucedemo.factory;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-// removed ChromeOptions usage per refactor
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import com.saucedemo.utils.ConfigReader;
 import java.time.Duration;
 
 public class DriverFactory {
-    // private static ThreadLocal<WebDriver> driver = new ThreadLocal<>(); // commented for single-run (no parallel)
     private static WebDriver driver;
 
     public static WebDriver initDriver() {
@@ -18,14 +16,16 @@ public class DriverFactory {
 
         switch (browser) {
             case "chrome":
+                WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
                 break;
             case "firefox":
-                    FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    driver = new FirefoxDriver(firefoxOptions);
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
                 break;
             case "edge":
-                    driver = new EdgeDriver();
+                WebDriverManager.edgedriver().setup();
+                driver = new EdgeDriver();
                 break;
             default:
                 throw new RuntimeException("Browser not supported: " + browser);

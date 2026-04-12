@@ -5,9 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import java.util.List;
 
-public class ProductsPage {
-    private WebDriver driver;
-
+public class ProductsPage extends BasePage {
     private By pageTitle = By.className("title");
     private By productItems = By.className("inventory_item");
     private By productNames = By.className("inventory_item_name");
@@ -19,23 +17,23 @@ public class ProductsPage {
     private By sortDropdown = By.className("product_sort_container");
 
     public ProductsPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public String getPageTitle() {
-        return driver.findElement(pageTitle).getText();
+        return waitAndGetText(pageTitle);
     }
 
     public int getProductCount() {
-        return driver.findElements(productItems).size();
+        return getElements(productItems).size();
     }
 
     public List<WebElement> getAllProducts() {
-        return driver.findElements(productItems);
+        return getElements(productItems);
     }
 
     public void addProductToCartByIndex(int index) {
-        List<WebElement> buttons = driver.findElements(addToCartButtons);
+        List<WebElement> buttons = getElements(addToCartButtons);
         if (index < buttons.size()) {
             buttons.get(index).click();
         }
@@ -43,23 +41,23 @@ public class ProductsPage {
 
     public void addProductToCartByName(String productName) {
         String buttonId = "add-to-cart-" + productName.toLowerCase().replace(" ", "-");
-        driver.findElement(By.id(buttonId)).click();
+        waitAndClick(By.id(buttonId));
     }
 
     public int getCartBadgeCount() {
         try {
-            return Integer.parseInt(driver.findElement(cartBadge).getText());
+            return Integer.parseInt(waitAndGetText(cartBadge));
         } catch (Exception e) {
             return 0;
         }
     }
 
     public void goToCart() {
-        driver.findElement(cartLink).click();
+        waitAndClick(cartLink);
     }
 
     public void sortBy(String option) {
-        driver.findElement(sortDropdown).click();
-        driver.findElement(By.cssSelector("option[value='" + option + "']")).click();
+        waitAndClick(sortDropdown);
+        waitAndClick(By.cssSelector("option[value='" + option + "']"));
     }
 }
